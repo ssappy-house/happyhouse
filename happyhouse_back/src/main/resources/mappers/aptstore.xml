@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.happyhouse.mapper.AptStoreMapper">
+
+	<select id="getStoreAroundApt" parameterType="String" resultType="AptStoreDto">
+		select storeno, storename, categoryS, dongname, address, lng, lat,
+			ST_Distance_Sphere(POINT(${lng},${lat}), POINT(lng, lat)) distance
+		from store
+		where ST_Distance_Sphere(POINT(${lng},${lat}), POINT(lng, lat)) <![CDATA[<=]]> 2000
+		and categoryL = #{category}
+		order by distance;
+	</select>
+
+</mapper>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.happyhouse.mapper.BoardMapper">
+
+	<!-- 게시글 전체 조회 -->
+	<select id="selectFreeboard" resultType="BoardDto">
+		SELECT boardno, userid, subject, content, regtime
+		FROM board
+		WHERE dongCode IS NULL
+		ORDER BY boardno DESC
+	</select>
+	
+	<!-- 게시글 동코드 조회 -->
+	<select id="selectLocalboard" parameterType="String" resultType="BoardDto">
+		SELECT boardno, userid, subject, content, regtime
+		FROM board
+		WHERE dongCode = #{dongCode}
+		ORDER BY boardno DESC
+	</select>
+	
+	<!-- 게시글 상세 조회 -->
+	<select id="selectFreeboardByNo" parameterType="int" resultType="BoardDto">
+		SELECT boardno, userid, subject, content, regtime
+		FROM board 
+		WHERE boardno = #{boardno}
+	</select>
+	
+	<!-- 게시글 등록 -->
+	<insert id="insertFreeboard" parameterType="BoardDto">
+		INSERT INTO board (
+			userid, dongCode, subject, content, regtime
+		) VALUES (
+			#{userid}, #{dongCode}, #{subject}, #{content}, now()
+		)
+	</insert>
+	
+	<!-- 게시글 수정 -->
+	<update id="updateFreeboard" parameterType="BoardDto">
+		UPDATE board
+		SET
+			userid = #{userid},
+			dongCode = #{dongCode},
+			subject = #{subject}, 
+		   	content = #{content},
+		   	regtime = now()
+		WHERE boardno = #{boardno}
+	</update>
+
+	<!-- 게시글 삭제 -->
+	<delete id="deleteFreeboard" parameterType="int">
+		DELETE 
+		FROM board 
+		WHERE boardno = #{boardno}
+	</delete>
+
+</mapper>
+
